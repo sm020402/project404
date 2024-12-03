@@ -1,0 +1,56 @@
+---
+title: "project"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(gridExtra)
+```
+
+## Data
+```{r }
+# morning: 1
+# rush hour = 1
+# frequent = 1 : 25, 49, 99, R4
+# good performance = 1: 68, 84, 99, R4
+# Day 1: 1
+
+day <- c(rep(1, 12), rep(-1, 12))
+rush <- c(1, 1, 1, -1, -1, -1, 1, 1, 1, -1, -1, -1, 
+          1, 1, 1, -1, -1, -1, 1, 1, 1, -1, -1, -1)
+frequent <- c(1, 1, 1, -1, -1, -1, -1, -1, -1, 1, 1, 1,
+              -1, -1, -1, 1, 1, 1, 1, 1, 1, -1, -1, -1)
+performance <- c(1, 1, 1, 1, 1, 1, -1, -1, -1, -1, -1, -1, 
+                 -1, -1, -1, -1, -1, -1, 1, 1, 1, 1, 1, 1)
+morning <- c(1, 1, 1, 1, 1, 1, -1, -1, -1, -1, -1, -1, 
+             1, 1, 1, 1, 1, 1, -1, -1, -1, -1, -1, -1)
+
+delays <- c(0, 1, 0, 1, 0, 0, 8, 0, 5, 0, 2, 3, 0, 0, 0, 0, 0, 0, -13, -2, -10, 36, 0, 0)
+bus <- data.frame(day = day, rush_hour = rush, frequent = frequent, past_performance = performance, time = morning, delay = delays)
+
+bus
+```
+
+```{r}
+
+model <- lm(delay ~ ., bus)
+summary(model)
+```
+```{r}
+
+
+boxplot(delay ~ rush_hour, bus)
+
+boxplot(delay ~ day, bus)
+
+boxplot(delay ~ frequent, bus)
+
+boxplot(delay ~ past_performance, bus)
+
+boxplot(delay ~ time, bus)
+
+
+```
+

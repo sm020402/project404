@@ -34,10 +34,19 @@ bus
 ```
 
 ```{r}
-
 model <- lm(delay ~ ., bus)
 summary(model)
 ```
+
+```{r}
+
+model <- lm(delay ~ rush_hour*frequent*past_performance*time, bus)
+summary(model)
+
+```
+
+
+
 ```{r}
 
 
@@ -51,6 +60,6 @@ boxplot(delay ~ past_performance, bus)
 
 boxplot(delay ~ time, bus)
 
-
+interaction.plot(bus$frequent, bus$time, bus$delay)
 ```
 

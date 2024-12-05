@@ -60,6 +60,6 @@ boxplot(delay ~ past_performance, bus)
 
 boxplot(delay ~ time, bus)
 
-interaction.plot(bus$frequent, bus$time, bus$delay)
+interaction.plot(bus$frequent, bus$time, bus$delay, xlab = "Frequent", ylab = "Average Delay (minutes)", trace.label = "Time of Day")
 ```
 

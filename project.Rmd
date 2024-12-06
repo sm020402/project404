@@ -42,6 +42,9 @@ aov(daymodel)
 summary(aov(daymodel))
 plot(daymodel$fitted.values ~ daymodel$residuals)
 ```
+```{r}
+summary(lm(delay ~ rush_hour*day*frequent*past_performance*time, bus))
+```
 
 ```{r}
 

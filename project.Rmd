@@ -6,8 +6,9 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
-library(Stat406)
+library(dplyr)
 library(gridExtra)
+library(faraway)
 ```
 
 ## Data
@@ -18,15 +19,15 @@ library(gridExtra)
 # good performance = 1: 68, 84, 99, R4
 # Day 1: 1
 
-day <- c(rep(1, 12), rep(-1, 12))
-rush <- c(1, 1, 1, -1, -1, -1, 1, 1, 1, -1, -1, -1, 
-          1, 1, 1, -1, -1, -1, 1, 1, 1, -1, -1, -1)
-frequent <- c(1, 1, 1, -1, -1, -1, -1, -1, -1, 1, 1, 1,
-              -1, -1, -1, 1, 1, 1, 1, 1, 1, -1, -1, -1)
-performance <- c(1, 1, 1, 1, 1, 1, -1, -1, -1, -1, -1, -1, 
-                 -1, -1, -1, -1, -1, -1, 1, 1, 1, 1, 1, 1)
-morning <- c(1, 1, 1, 1, 1, 1, -1, -1, -1, -1, -1, -1, 
-             1, 1, 1, 1, 1, 1, -1, -1, -1, -1, -1, -1)
+day <- as.factor(c(rep(1, 12), rep(-1, 12)))
+rush <- as.factor(c(1, 1, 1, -1, -1, -1, 1, 1, 1, -1, -1, -1, 
+          1, 1, 1, -1, -1, -1, 1, 1, 1, -1, -1, -1))
+frequent <- as.factor(c(1, 1, 1, -1, -1, -1, -1, -1, -1, 1, 1, 1,
+              -1, -1, -1, 1, 1, 1, 1, 1, 1, -1, -1, -1))
+performance <- as.factor(c(1, 1, 1, 1, 1, 1, -1, -1, -1, -1, -1, -1, 
+                 -1, -1, -1, -1, -1, -1, 1, 1, 1, 1, 1, 1))
+morning <- as.factor(c(1, 1, 1, 1, 1, 1, -1, -1, -1, -1, -1, -1, 
+             1, 1, 1, 1, 1, 1, -1, -1, -1, -1, -1, -1))
 
 delays <- c(0, 1, 0, 1, 0, 0, 8, 0, 5, 0, 2, 3, 0, 0, 0, 0, 0, 0, -13, -2, -10, 36, 0, 0)
 bus <- data.frame(day = day, rush_hour = rush, frequent = frequent, past_performance = performance, time = morning, delay = delays)
@@ -66,3 +67,21 @@ boxplot(delay ~ time, bus)
 interaction.plot(bus$frequent, bus$time, bus$delay, xlab = "Frequent", ylab = "Average Delay (minutes)", trace.label = "Time of Day")
 ```
 
+```{r}
+# Contrast estimates (section 6.7)
+day.contr.est <- mean(filter(bus, day == 1)$delay) - mean(filter(bus, day == -1)$delay)
+frequent.contr.est <- mean(filter(bus, frequent == 1)$delay) - mean(filter(bus, frequent == -1)$delay)
+performance.contr.est <- mean(filter(bus, past_performance == 1)$delay) - mean(filter(bus, past_performance == -1)$delay)
+rush_hour.contr.est <- mean(filter(bus, rush_hour == 1)$delay) - mean(filter(bus, rush_hour == -1)$delay)
+time.contr.est <- mean(filter(bus, time == 1)$delay) - mean(filter(bus, time == -1)$delay)
+
+# Standard error of any contrast's estimator
+se.contrast <- 2 * sqrt((967.3333/16)/24) # MS(Residuals) = 967.3333/16 from aov(model) above
+
+# 95% CI for contrast
+day.contr.ci95 <- c(day.contr.est - qt(0.975, 16) * se.contrast, day.contr.est + qt(0.975, 16) * se.contrast)
+frequent.contr.ci95 <- c(frequent.contr.est - qt(0.975, 16) * se.contrast, frequent.contr.est + qt(0.975, 16) * se.contrast)
+performance.contr.ci95 <- c(performance.contr.est - qt(0.975, 16) * se.contrast, performance.contr.est + qt(0.975, 16) * se.contrast)
+rush_hour.contr.ci95 <- c(rush_hour.contr.est - qt(0.975, 16) * se.contrast, rush_hour.contr.est + qt(0.975, 16) * se.contrast)
+time.contr.ci95 <- c(time.contr.est - qt(0.975, 16) * se.contrast, time.contr.est + qt(0.975, 16) * se.contrast)
+```

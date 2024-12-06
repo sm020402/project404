@@ -6,6 +6,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
+library(Stat406)
 library(gridExtra)
 ```
 
@@ -34,18 +35,20 @@ bus
 ```
 
 ```{r}
-model <- lm(delay ~ ., bus)
-summary(model)
+daymodel <- lm(delay ~ ., bus)
+summary(daymodel)
+aov(daymodel)
+plot(daymodel$fitted.values ~ daymodel$residuals)
 ```
 
 ```{r}
 
 model <- lm(delay ~ rush_hour*frequent*past_performance*time, bus)
 summary(model)
+aov(model)
+plot(model$fitted.values ~ model$residuals)
 
 ```
-
-
 
 ```{r}
 

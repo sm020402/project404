@@ -43,7 +43,8 @@ summary(aov(daymodel))
 plot(daymodel$fitted.values ~ daymodel$residuals)
 ```
 ```{r}
-summary(lm(delay ~ rush_hour*day*frequent*past_performance*time, bus))
+mult <- lm(delay ~ rush_hour*day*frequent*past_performance*time, bus)
+summary(mult)
 ```
 
 ```{r}
@@ -85,9 +86,14 @@ se.contrast <- 2 * sqrt((967.3333/16)/24) # MS(Residuals) = 967.3333/16 from aov
 
 # 95% CI for contrast
 day.contr.ci95 <- c(day.contr.est - qt(0.975, 16) * se.contrast, day.contr.est + qt(0.975, 16) * se.contrast)
+day.contr.ci90 <- c(day.contr.est - qt(0.95, 16) * se.contrast, day.contr.est + qt(0.95, 16) * se.contrast)
 frequent.contr.ci95 <- c(frequent.contr.est - qt(0.975, 16) * se.contrast, frequent.contr.est + qt(0.975, 16) * se.contrast)
 frequent.contr.ci90 <- c(frequent.contr.est - qt(0.95, 16) * se.contrast, frequent.contr.est + qt(0.95, 16) * se.contrast)
 performance.contr.ci95 <- c(performance.contr.est - qt(0.975, 16) * se.contrast, performance.contr.est + qt(0.975, 16) * se.contrast)
+performance.contr.ci90 <- c(performance.contr.est - qt(0.95, 16) * se.contrast, performance.contr.est + qt(0.95, 16) * se.contrast)
 rush_hour.contr.ci95 <- c(rush_hour.contr.est - qt(0.975, 16) * se.contrast, rush_hour.contr.est + qt(0.975, 16) * se.contrast)
+rush_hour.contr.ci90 <- c(rush_hour.contr.est - qt(0.95, 16) * se.contrast, rush_hour.contr.est + qt(0.95, 16) * se.contrast)
 time.contr.ci95 <- c(time.contr.est - qt(0.975, 16) * se.contrast, time.contr.est + qt(0.975, 16) * se.contrast)
+time.contr.ci90 <- c(time.contr.est - qt(0.95, 16) * se.contrast, time.contr.est + qt(0.95, 16) * se.contrast)
+rush_hour.contr.ci90 <- c(rush_hour.contr.est - qt(0.95, 16) * se.contrast, rush_hour.contr.est + qt(0.95, 16) * se.contrast)
 ```
